@@ -1,5 +1,6 @@
 package com.example.jokesapi;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -47,7 +48,6 @@ public class FirstPageFragment extends Fragment{
                 if(editTextInputCounts.getText().toString().length()<=0) {
                     Toast.makeText(getContext(), getActivity().getResources().getString(R.string.error_counts), Toast.LENGTH_SHORT).show();
                 }else {
-                    
                     bdHandler.deleteAll();
                     jokesList.clear();
                     connectHandler.setCounts(Integer.valueOf(editTextInputCounts.getText().toString()));
@@ -66,8 +66,12 @@ public class FirstPageFragment extends Fragment{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                bdHandler.addJokes(jokesList);
-                jokesRVAdapter.upDate(jokesList);
+                    if(jokesList.size()>0){
+                        bdHandler.addJokes(jokesList);
+                        jokesRVAdapter.upDate(jokesList);
+                    }else {
+                       Toast.makeText(getContext(),getActivity().getResources().getString(R.string.Error_connect),Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });

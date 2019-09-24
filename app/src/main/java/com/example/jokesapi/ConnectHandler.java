@@ -1,5 +1,8 @@
 package com.example.jokesapi;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -20,8 +23,7 @@ public class ConnectHandler {
     private static ArrayList<OneJoke>inputJokes = new ArrayList<>();
     private static int counts = 1;
 
-
-//метод для получения даных от API
+    //метод для получения даных от API
     public ArrayList<OneJoke> sendGet() throws Exception {
         StringBuffer uriString = new StringBuffer();
         uriString.append(URL_ADRESS);

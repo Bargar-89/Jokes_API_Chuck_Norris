@@ -3,4 +3,5 @@
     <string name="error_counts">Error, please input counts.</string>
     <string name="title_jokes">Jokes</string>
     <string name="title_api">About API</string>
+    <string name="Error_connect">Error connection. Try later.</string>
 </resources>
