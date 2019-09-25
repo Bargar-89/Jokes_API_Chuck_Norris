@@ -12,7 +12,7 @@
     <EditText
         android:id="@+id/firs_fragment__input_counts"
         android:layout_width="wrap_content"
-        android:hint="counts"
+        android:hint="@string/first_fragment_text_edittext_counts"
         android:layout_height="wrap_content"
         android:imeOptions="actionDone"
         android:inputType="number"
@@ -32,5 +32,5 @@
         android:padding="5dp"
         android:textSize="25sp"
         android:layout_gravity="center"
-        android:text="RELOAD" />
+        android:text="@string/first_fragment_btn_text_reload" />
 </LinearLayout>
