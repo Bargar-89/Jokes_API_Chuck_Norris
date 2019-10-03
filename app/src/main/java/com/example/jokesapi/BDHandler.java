@@ -19,7 +19,7 @@ public class BDHandler extends SQLiteOpenHelper {
     public BDHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-//создаем базу данных
+//create BD
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String CREATE_JOKES_TABLE = "CREATE TABLE "+TABLE_NAME+"("+JOKE_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+JOKE_TEXT+" TEXT, "+JOKE_NUMBER+" TEXT"+")";
@@ -31,7 +31,7 @@ public class BDHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
-//метод для добавления данных в базу данных
+//for add jokes to BD
     public void addJokes(ArrayList<OneJoke> jokeArrayList){
         SQLiteDatabase db = this.getWritableDatabase();
         for (OneJoke oneJoke:jokeArrayList){
@@ -42,7 +42,7 @@ public class BDHandler extends SQLiteOpenHelper {
         }
         db.close();
     }
-//метод для извлечения всех данных
+//get all jokes
     public ArrayList<OneJoke> getAllJokes(){
         SQLiteDatabase db =this.getReadableDatabase();
         ArrayList<OneJoke> jokeList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class BDHandler extends SQLiteOpenHelper {
         db.close();
         return jokeList;
     }
-//метод для удаления всех данных из таблицы
+//for delet all jokes from table
     public void deleteAll(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM "+ TABLE_NAME);

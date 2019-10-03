@@ -1,7 +1,5 @@
 package com.example.jokesapi;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 
 public class FirstPageFragment extends Fragment{
@@ -26,7 +23,6 @@ public class FirstPageFragment extends Fragment{
     private JokesRVAdapter jokesRVAdapter;
     private BDHandler bdHandler;
     private ConnectHandler connectHandler;
-    private AsyncTask asyncTask;
 
     @Nullable
     @Override
@@ -51,26 +47,34 @@ public class FirstPageFragment extends Fragment{
                     bdHandler.deleteAll();
                     jokesList.clear();
                     connectHandler.setCounts(Integer.valueOf(editTextInputCounts.getText().toString()));
-                    asyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
+                    final Thread getJokesThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                jokesList = connectHandler.sendGet();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+//start connection and get jokes
+                    if(connectHandler.hasConnection(getActivity())){
+                        getJokesThread.start();
                         try {
-                           jokesList = connectHandler.sendGet();
-                        } catch (Exception e) {
+                            getJokesThread.join();
+                        } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                      }
-                    });
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                    if(jokesList.size()>0){
-                        bdHandler.addJokes(jokesList);
-                        jokesRVAdapter.upDate(jokesList);
+                        getJokesThread.interrupt();
+//update UI and BD
+                        if (jokesList.size() > 0) {
+                            bdHandler.addJokes(jokesList);
+                            jokesRVAdapter.upDate(jokesList);
+                        } else {
+                            Toast.makeText(getContext(),getActivity().getResources().getString(R.string.error_) , Toast.LENGTH_LONG).show();
+                        }
                     }else {
-                       Toast.makeText(getContext(),getActivity().getResources().getString(R.string.Error_connect),Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), getActivity().getResources().getString(R.string.Error_connect), Toast.LENGTH_LONG).show();
                     }
                 }
             }

@@ -1,6 +1,9 @@
 package com.example.jokesapi;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.telephony.PhoneStateListener;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -23,7 +26,9 @@ public class ConnectHandler {
     private static ArrayList<OneJoke>inputJokes = new ArrayList<>();
     private static int counts = 1;
 
-    //метод для получения даных от API
+
+
+    //send GET to API
     public ArrayList<OneJoke> sendGet() throws Exception {
         StringBuffer uriString = new StringBuffer();
         uriString.append(URL_ADRESS);
@@ -33,14 +38,12 @@ public class ConnectHandler {
         con.setRequestMethod(GET);
         con.setRequestProperty("User-Agent", USER_AGENT);
         int responseCode = con.getResponseCode();
-//формируем строку и из Json формируем обЪекты
+     //work with JSON, jokes to array
         if(responseCode==200){
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String line;
             StringBuffer buffer = new StringBuffer(2048);
-            while ((line = in.readLine()) != null) {
-                buffer.append(line);
-            }
+            while ((line = in.readLine()) != null) {buffer.append(line);}
             String message = buffer.toString();
             JSONObject jsonObject = new JSONObject(message);
             JSONArray jsonArray = jsonObject.getJSONArray(KEY_VALUE);
@@ -61,9 +64,23 @@ public class ConnectHandler {
     public static void setCounts(int counts) {
         ConnectHandler.counts = counts;
     }
-    //меняем в тексте &quot; на "
+    //replace &quot and first empty space;
     private String deleteQuots(String str){
         String respString = str.replaceAll("&quot;","\"");
+        if(respString.startsWith(" ")){
+            respString.replaceFirst(" ","");
+        }
         return respString;
+    }
+    // internet connection
+    public static boolean hasConnection(final Context context){
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (wifiInfo != null && wifiInfo.isConnected()){ return true;}
+        wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (wifiInfo != null && wifiInfo.isConnected()){return true;}
+        wifiInfo = cm.getActiveNetworkInfo();
+        if (wifiInfo != null && wifiInfo.isConnected()){return true;}
+        return false;
     }
 }

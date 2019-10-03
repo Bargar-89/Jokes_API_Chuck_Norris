@@ -6,4 +6,5 @@
     <string name="Error_connect">Error connection. Try later.</string>
     <string name="first_fragment_text_edittext_counts">counts</string>
     <string name="first_fragment_btn_text_reload">RELOAD</string>
+    <string name="error_">Sorry, error</string>
 </resources>
