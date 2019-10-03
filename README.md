@@ -1,4 +1,4 @@
-# Jokes_API_Chuck_Norris /n
+# Jokes_API_Chuck_Norris \n
 Jokes API /n
 Описание приложения:/n
 Мобильное приложение с шутками про Чака Норриса./n
